@@ -1,7 +1,9 @@
-pragma solidity ^0.4.8;
+pragma solidity ^0.4.13;
 
 
 import './ERC20.sol';
+import './SafeMath.sol';
+
 
 /**
  * Standard ERC20 token
@@ -10,46 +12,52 @@ import './ERC20.sol';
  * Based on code by FirstBlood:
  * https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
  */
-/*  ERC 20 token */
-contract StandardToken is ERC20 {
+contract StandardToken is ERC20, SafeMath {
 
-    function transfer(address _to, uint256 _value) returns (bool success) {
-      if (balances[msg.sender] >= _value && _value > 0) {
-        balances[msg.sender] -= _value;
-        balances[_to] += _value;
-        Transfer(msg.sender, _to, _value);
-        return true;
-      } else {
-        return false;
-      }
-    }
+  /**
+   * @dev Fix for the ERC20 short address attack.
+   */
+  modifier onlyPayloadSize(uint size) {
+     require(msg.data.length >= size + 4) ;
+     _;
+  }
 
-    function transferFrom(address _from, address _to, uint256 _value) returns (bool success) {
-      if (balances[_from] >= _value && allowed[_from][msg.sender] >= _value && _value > 0) {
-        balances[_to] += _value;
-        balances[_from] -= _value;
-        allowed[_from][msg.sender] -= _value;
-        Transfer(_from, _to, _value);
-        return true;
-      } else {
-        return false;
-      }
-    }
 
-    function balanceOf(address _owner) constant returns (uint256 balance) {
-        return balances[_owner];
-    }
+  mapping(address => uint) balances;
+  mapping (address => mapping (address => uint)) allowed;
 
-    function approve(address _spender, uint256 _value) returns (bool success) {
-        allowed[msg.sender][_spender] = _value;
-        Approval(msg.sender, _spender, _value);
-        return true;
-    }
+  function transfer(address _to, uint _value) onlyPayloadSize(2 * 32)  returns (bool success){
+    balances[msg.sender] = safeSubtract(balances[msg.sender], _value);
+    balances[_to] = safeAdd(balances[_to], _value);
+    Transfer(msg.sender, _to, _value);
+    return true;
+  }
 
-    function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
-      return allowed[_owner][_spender];
-    }
+  function transferFrom(address _from, address _to, uint _value) onlyPayloadSize(3 * 32) returns (bool success) {
+    var _allowance = allowed[_from][msg.sender];
 
-    mapping (address => uint256) balances;
-    mapping (address => mapping (address => uint256)) allowed;
+    // Check is not needed because safeSub(_allowance, _value) will already throw if this condition is not met
+    // if (_value > _allowance) throw;
+
+    balances[_to] = safeAdd(balances[_to], _value);
+    balances[_from] = safeSubtract(balances[_from], _value);
+    allowed[_from][msg.sender] = safeSubtract(_allowance, _value);
+    Transfer(_from, _to, _value);
+    return true;
+  }
+
+  function balanceOf(address _owner) constant returns (uint balance) {
+    return balances[_owner];
+  }
+
+  function approve(address _spender, uint _value) returns (bool success) {
+    allowed[msg.sender][_spender] = _value;
+    Approval(msg.sender, _spender, _value);
+    return true;
+  }
+
+  function allowance(address _owner, address _spender) constant returns (uint remaining) {
+    return allowed[_owner][_spender];
+  }
+
 }
