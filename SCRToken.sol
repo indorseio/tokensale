@@ -27,21 +27,21 @@ contract SCRToken is ERC20, SafeMath, Ownable {
 
     // @dev hijack this function to set crowdsale address
     // 
-    function allowance(address owner, address spender) constant returns (uint) {
+    function allowance(address , address ) constant returns (uint) {
         return 0;
     }
     
     
-    function approve(address _crowdSale , uint value) onlyOwner returns (bool ok)  {
-       
+    function approve(address _crowdSale , uint256) onlyOwner returns (bool ok)  {
         crowdSale       = _crowdSale;
+        return true;
     }
 
-    function transfer(address to, uint value) returns (bool ok) {
+    function transfer(address , uint256 ) returns (bool) {
         assert(false);
     }
     
-    function transferFrom(address from, address to, uint value) returns (bool ok) {
+    function transferFrom(address from, address to, uint256 value) returns (bool) {
         if (from==0x0) mintToken(to,value);
         else if (to == 0x0) burnToken(from,value);
         else return false;
