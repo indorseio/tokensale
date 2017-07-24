@@ -84,8 +84,8 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
         uint256 etherToRefund = tokensToRefund / tokenExchangeRate;
 
         require(CreateIND(_beneficiary,tokensToAllocate));            // Create IDR
-        if (!CreateSCR(_beneficiary,tokensToAllocate / 1 ether)) {
-            badCreateSCR(_beneficiary,tokensToAllocate / 1 ether);
+        if (!CreateSCR(_beneficiary,(_value-etherToRefund) / 1 ether)) {
+            badCreateSCR(_beneficiary,(_value-etherToRefund) / 1 ether);
         }
         msg.sender.transfer(etherToRefund);
         LogRefund(msg.sender,etherToRefund);
@@ -96,8 +96,8 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
 
       totalSupply = checkedSupply;
       require(CreateIND(_beneficiary, tokens));  // logs token creation
-      if (!CreateSCR(_beneficiary, tokens / 1 ether)) {
-          badCreateSCR(_beneficiary,tokens / 1 ether);
+      if (!CreateSCR(_beneficiary, _value / 1 ether)) {
+          badCreateSCR(_beneficiary,_value / 1 ether);
       }
       ethFundDeposit.transfer(this.balance);
     }
