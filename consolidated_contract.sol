@@ -213,7 +213,6 @@ contract SCRToken is ERC20, SafeMath, Ownable {
         return true;
     }
 
-
     function mintToken(address who, uint256 value) internal {
         require((msg.sender==crowdSale) || (msg.sender == indorsePlatform));
         require(who != 0x0);
@@ -295,7 +294,6 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     return super.approve(_spender,_value);
   }
 }
-
 // ================= Indorse Token Contract end =======================
 
 // ================= Actual Sale Contract Start ====================
@@ -307,22 +305,17 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     IndorseToken    ind;
 
     // crowdsale parameters
-   
     uint256 public fundingStartTime;
     uint256 public fundingEndTime;
     uint256 public totalSupply;
     address public ethFundDeposit;      // deposit address for ETH for Indorse Fund
     address public indFundDeposit;      // deposit address for Indorse reserve
 
-
     uint256 public constant decimals = 18;  // #dp in Indorse contract
     uint256 public tokenCreationCap;
     uint256 public constant tokenExchangeRate = 1000;               // 1000 IND tokens per 1 ETH
+    uint256 public constant minContribution = 0.05 ether;
  
- 
-
-
-   
     function IndorseSaleContract(   address _ethFundDeposit,
                                     address _indFundDeposit,
                                     address _INDtoken, 
@@ -355,12 +348,12 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
         createTokens(msg.sender,msg.value);
     }
 
-/// @dev Accepts ether and creates new IND tokens.
+    /// @dev Accepts ether and creates new IND tokens.
     function createTokens(address _beneficiary, uint256 _value) internal whenNotPaused {
       require (tokenCreationCap > totalSupply);  // CAP reached no more please
       require (now >= fundingStartTime);
       require (now <= fundingEndTime);
-      require (_value > 0);
+      require (_value > minContribution);         // To avoid spam transactions on the network    
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
       uint256 checkedSupply = safeAdd(totalSupply, tokens);
@@ -373,8 +366,8 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
         uint256 etherToRefund = tokensToRefund / tokenExchangeRate;
 
         require(CreateIND(_beneficiary,tokensToAllocate));            // Create IDR
-        if (!CreateSCR(_beneficiary,(_value-etherToRefund) / 1 ether)) {
-            badCreateSCR(_beneficiary,(_value-etherToRefund) / 1 ether);
+        if (!CreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether)) {
+            badCreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether);
         }
         msg.sender.transfer(etherToRefund);
         LogRefund(msg.sender,etherToRefund);
