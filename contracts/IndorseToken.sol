@@ -39,12 +39,13 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
       indFutureDeposit  = _indFutureDeposit ;
       indPresaleDeposit = _indPresaleDeposit;
       indInflationDeposit = _indInflationDeposit;
-      totalSupply       = indFund;
-
+      
       balances[indFundDeposit]    = indFund;    // Deposit IND share
       balances[indFutureDeposit]  = indFuture;  // Deposit IND share
       balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
       balances[indInflationDeposit] = indInflation; // Deposit for inflation
+
+      totalSupply       = indFund + indPreSale + indFuture + indInflation;
 
       Transfer(0x0,indFundDeposit,indFund);
       Transfer(0x0,indFutureDeposit,indFuture);
