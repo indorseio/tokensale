@@ -8,90 +8,55 @@ import "./Pausable.sol";
 // Then deploy Sale Contract
 // Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
 
-contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
+contract IndorseToken is SafeMath, StandardToken, Pausable {
 
-    event badCreateSCR(address _beneficiary,uint256 tokens);
+    // metadata
+    string public constant name = "Indorse Token";
+    string public constant symbol = "IND";
+    uint256 public constant decimals = 18;
+    string public version = "1.0";
 
-    SCRToken        scr;
-    IndorseToken    ind;
-
-    // crowdsale parameters
-    uint256 public fundingStartTime;
-    uint256 public fundingEndTime;
-    uint256 public totalSupply;
-    address public ethFundDeposit;      // deposit address for ETH for Indorse Fund
+    // contracts
     address public indFundDeposit;      // deposit address for Indorse reserve
+    address public indFutureDeposit;    // deposit address for Indorse Future reserve
+    address public indPresaleDeposit;   // deposit address for Indorse Future reserve
+    address public indInflationDeposit; // deposit address for Indorse Inflation pool
+    
+    uint256 public constant indFund    = 301 * (10 ** 5) * 10**decimals;   // 30.1 million IND reserved for Indorse use
+    uint256 public constant indPreSale =  17 * (10 ** 6) * 10**decimals; // 
+    uint256 public constant indFuture  = 692 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indInflation  = 100 * (10**6) * 10**decimals;  // 69.2 million IND for future token sale
+   
+    // constructor
+    function IndorseToken(
+        address _indFundDeposit,
+        address _indFutureDeposit,
+        address _indPresaleDeposit,
+        address _indInflationDeposit
+        )
+    {
+      indFundDeposit    = _indFundDeposit;
+      indFutureDeposit  = _indFutureDeposit ;
+      indPresaleDeposit = _indPresaleDeposit;
+      indInflationDeposit = _indInflationDeposit;
+      totalSupply       = indFund;
 
-    uint256 public constant decimals = 18;  // #dp in Indorse contract
-    uint256 public tokenCreationCap;
-    uint256 public constant tokenExchangeRate = 1000;               // 1000 IND tokens per 1 ETH
-    uint256 public constant minContribution = 0.05 ether;
- 
-    function IndorseSaleContract(   address _ethFundDeposit,
-                                    address _indFundDeposit,
-                                    address _INDtoken, 
-                                    address _SCRtoken,
-                                    uint256 _fundingStartTime,
-                                    uint256 duration    ) { // duration in days
-        ethFundDeposit   = _ethFundDeposit;
-        indFundDeposit   = _indFundDeposit;
-        scr = SCRToken(_SCRtoken);
-        ind = IndorseToken(_INDtoken);
-        fundingStartTime = _fundingStartTime;
-        fundingEndTime   = fundingStartTime + duration * 1 days;
+      balances[indFundDeposit]    = indFund;    // Deposit IND share
+      balances[indFutureDeposit]  = indFuture;  // Deposit IND share
+      balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
+      balances[indInflationDeposit] = indInflation; // Deposit for inflation
 
-        tokenCreationCap = ind.balanceOf(_indFundDeposit);
-    }
+      Transfer(0x0,indFundDeposit,indFund);
+      Transfer(0x0,indFutureDeposit,indFuture);
+      Transfer(0x0,indPresaleDeposit,indPreSale);
+      Transfer(0x0,indInflationDeposit,indInflation);
+   }
 
-    event MintIND(address from, address to, uint256 val);
-    event LogRefund(address indexed _to, uint256 _value);
+  function transfer(address _to, uint _value) whenNotPaused returns (bool success)  {
+    return super.transfer(_to,_value);
+  }
 
-    function CreateIND(address to, uint256 val) internal returns (bool success){
-        MintIND(indFundDeposit,to,val);
-        return ind.transferFrom(indFundDeposit,to,val);
-    }
-
-    function CreateSCR(address to, uint256 val) internal returns (bool success){
-        return scr.transferFrom(0x0,to,val);
-    }
-
-    function () payable {    
-        createTokens(msg.sender,msg.value);
-    }
-
-    /// @dev Accepts ether and creates new IND tokens.
-    function createTokens(address _beneficiary, uint256 _value) internal whenNotPaused {
-      require (tokenCreationCap > totalSupply);  // CAP reached no more please
-      require (now >= fundingStartTime);
-      require (now <= fundingEndTime);
-      require (_value > minContribution);         // To avoid spam transactions on the network    
-
-      uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
-      uint256 checkedSupply = safeAdd(totalSupply, tokens);
-      
-      // DA 8/6/2017 to fairly allocate the last few tokens
-      if (tokenCreationCap < checkedSupply) {        
-        uint256 tokensToAllocate = safeSubtract(tokenCreationCap,totalSupply);
-        uint256 tokensToRefund   = safeSubtract(tokens,tokensToAllocate);
-        totalSupply = tokenCreationCap;
-        uint256 etherToRefund = tokensToRefund / tokenExchangeRate;
-
-        require(CreateIND(_beneficiary,tokensToAllocate));            // Create IDR
-        if (!CreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether)) {
-            badCreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether);
-        }
-        msg.sender.transfer(etherToRefund);
-        LogRefund(msg.sender,etherToRefund);
-        ethFundDeposit.transfer(this.balance);
-        return;
-      }
-      // DA 8/6/2017 end of fair allocation code
-
-      totalSupply = checkedSupply;
-      require(CreateIND(_beneficiary, tokens));  // logs token creation
-      if (!CreateSCR(_beneficiary, _value / 1 ether)) {
-          badCreateSCR(_beneficiary,_value / 1 ether);
-      }
-      ethFundDeposit.transfer(this.balance);
-    }
+  function approve(address _spender, uint _value) whenNotPaused returns (bool success)  {
+    return super.approve(_spender,_value);
+  }
 }
