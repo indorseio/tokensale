@@ -10,11 +10,19 @@ contract('SCRToken', function(accounts){
     });
   });
 
-  it("should reject setHost() requests from any address", function(){
+  // it("should reject setHost() requests from any address", function(){
+  //   return SCRToken.deployed().then(function(instance){
+  //     return instance.setHost(accounts[0]);
+  //   }).then(function(){
+  //     assert.equal(SCRToken.indorsePlatform, undefined);
+  //   });
+  // });
+
+  it("should have accounts[0] listed as the owner", function(){
     return SCRToken.deployed().then(function(instance){
-      return instance.setHost(accounts[0]);
-    }).then(function(){
-      assert.equal(SCRToken.indorsePlatform, undefined);
+      return instance.owner();
+    }).then(function(owner){
+      assert.equal(owner, accounts[0]);
     });
   });
 });
