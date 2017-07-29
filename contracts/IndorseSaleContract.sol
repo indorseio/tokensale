@@ -1,12 +1,14 @@
 pragma solidity ^0.4.11;
-import "./StandardToken.sol";
+
+// for test
+import "./IndorseToken.sol";
+import "./SCRtoken.sol";
+
+
 import "./SafeMath.sol";
+import "./Ownable.sol";
 import "./Pausable.sol";
 
-// note introduced onlyPayloadSize in StandardToken.sol to protect against short address attacks
-// Then Deploy IndorseToken and SCRToken
-// Then deploy Sale Contract
-// Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
 
 contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
 
