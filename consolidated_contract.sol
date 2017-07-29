@@ -16,6 +16,7 @@ contract Ownable {
 
   modifier onlyOwner() {
     require(msg.sender == owner);
+    
     _;
   }
 
@@ -48,6 +49,7 @@ contract SafeMath {
       assert((x == 0)||(z/x == y));
       return z;
     }
+
 }
 // ================= Safemath Contract end ==============================
 
@@ -70,14 +72,6 @@ contract ERC20 {
 // ================= ERC20 Token Contract end ===========================
 
 // ================= Standard Token Contract start ======================
-/**
- * Standard ERC20 token
- *
- * https://github.com/ethereum/EIPs/issues/20
- * Based on code by FirstBlood:
- * https://github.com/Firstbloodio/token/blob/master/smart_contract/FirstBloodToken.sol
- */
-/*  ERC 20 token */
 contract StandardToken is ERC20, SafeMath {
 
   /**
@@ -87,7 +81,6 @@ contract StandardToken is ERC20, SafeMath {
      require(msg.data.length >= size + 4) ;
      _;
   }
-
 
   mapping(address => uint) balances;
   mapping (address => mapping (address => uint)) allowed;
@@ -125,9 +118,7 @@ contract StandardToken is ERC20, SafeMath {
   function allowance(address _owner, address _spender) constant returns (uint remaining) {
     return allowed[_owner][_spender];
   }
-
 }
-
 // ================= Standard Token Contract end ========================
 
 // ================= Pausable Token Contract start ======================
@@ -140,6 +131,8 @@ contract Pausable is Ownable {
   event Unpause();
 
   bool public paused = false;
+
+
   /**
    * @dev modifier to allow actions only when the contract IS paused
    */
@@ -199,21 +192,21 @@ contract SCRToken is ERC20, SafeMath, Ownable {
 
     // @dev hijack this function to set crowdsale address
     // 
-    function allowance(address, address ) constant returns (uint) {
+    function allowance(address , address ) constant returns (uint) {
         return 0;
     }
     
     
-    function approve(address _crowdSale , uint) onlyOwner returns (bool)  {
-       
+    function approve(address _crowdSale , uint256) onlyOwner returns (bool ok)  {
         crowdSale       = _crowdSale;
+        return true;
     }
 
-    function transfer(address, uint) returns (bool) {
+    function transfer(address , uint256 ) returns (bool) {
         assert(false);
     }
     
-    function transferFrom(address from, address to, uint value) returns (bool ok) {
+    function transferFrom(address from, address to, uint256 value) returns (bool) {
         if (from==0x0) mintToken(to,value);
         else if (to == 0x0) burnToken(from,value);
         else return false;
@@ -245,13 +238,13 @@ contract SCRToken is ERC20, SafeMath, Ownable {
 // ================= SCR Token Contract end =============================
 
 // ================= Indorse Token Contract start =======================
-
 // note introduced onlyPayloadSize in StandardToken.sol to protect against short address attacks
 // Then Deploy IndorseToken and SCRToken
 // Then deploy Sale Contract
 // Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
 
 contract IndorseToken is SafeMath, StandardToken, Pausable {
+
     // metadata
     string public constant name = "Indorse Token";
     string public constant symbol = "IND";
@@ -259,15 +252,15 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     string public version = "1.0";
 
     // contracts
-    address public indFundDeposit;                                          // deposit address for Indorse reserve
-    address public indFutureDeposit;                                        // deposit address for Indorse Future reserve
-    address public indPresaleDeposit;                                       // deposit address for Indorse Future reserve
-    address public indInflationDeposit;                                     // deposit address for Indorse Inflation pool
+    address public indFundDeposit;      // deposit address for Indorse reserve
+    address public indFutureDeposit;    // deposit address for Indorse Future reserve
+    address public indPresaleDeposit;   // deposit address for Indorse Future reserve
+    address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
-    uint256 public constant indFund    = 301 * (10 ** 5) * 10**decimals;    // 30.1 million IND reserved for Indorse use
-    uint256 public constant indPreSale =  17 * (10 ** 6) * 10**decimals;    
-    uint256 public constant indFuture  = 692 * (10**5) * 10**decimals;      // 69.2 million IND for future token sale
-    uint256 public constant indInflation  = 100 * (10**6) * 10**decimals;   // 69.2 million IND for future token sale
+    uint256 public constant indFund    = 301 * (10 ** 5) * 10**decimals;   // 30.1 million IND reserved for Indorse use
+    uint256 public constant indPreSale =  17 * (10 ** 6) * 10**decimals; // 
+    uint256 public constant indFuture  = 692 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indInflation  = 100 * (10**6) * 10**decimals;  // 69.2 million IND for future token sale
    
     // constructor
     function IndorseToken(
@@ -283,10 +276,10 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
       indInflationDeposit = _indInflationDeposit;
       totalSupply       = indFund;
 
-      balances[indFundDeposit]    = indFund;                                 // Deposit IND share
-      balances[indFutureDeposit]  = indFuture;                               // Deposit IND share
-      balances[indPresaleDeposit] = indPreSale;                              // Deposit IND future share
-      balances[indInflationDeposit] = indInflation;                          // Deposit for inflation
+      balances[indFundDeposit]    = indFund;    // Deposit IND share
+      balances[indFutureDeposit]  = indFuture;  // Deposit IND share
+      balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
+      balances[indInflationDeposit] = indInflation; // Deposit for inflation
 
       Transfer(0x0,indFundDeposit,indFund);
       Transfer(0x0,indFutureDeposit,indFuture);
@@ -302,6 +295,7 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     return super.approve(_spender,_value);
   }
 }
+
 // ================= Indorse Token Contract end =======================
 
 // ================= Actual Sale Contract Start ====================
