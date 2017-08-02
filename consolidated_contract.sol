@@ -241,7 +241,6 @@ contract SCRToken is ERC20, SafeMath, Ownable {
 // Then Deploy IndorseToken and SCRToken
 // Then deploy Sale Contract
 // Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
-
 contract IndorseToken is SafeMath, StandardToken, Pausable {
 
     // metadata
