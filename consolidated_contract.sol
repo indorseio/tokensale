@@ -241,7 +241,6 @@ contract SCRToken is ERC20, SafeMath, Ownable {
 // Then Deploy IndorseToken and SCRToken
 // Then deploy Sale Contract
 // Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
-
 contract IndorseToken is SafeMath, StandardToken, Pausable {
 
     // metadata
@@ -273,12 +272,13 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
       indFutureDeposit  = _indFutureDeposit ;
       indPresaleDeposit = _indPresaleDeposit;
       indInflationDeposit = _indInflationDeposit;
-      totalSupply       = indFund;
-
+      
       balances[indFundDeposit]    = indFund;    // Deposit IND share
       balances[indFutureDeposit]  = indFuture;  // Deposit IND share
       balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
       balances[indInflationDeposit] = indInflation; // Deposit for inflation
+
+      totalSupply       = indFund + indPreSale + indFuture + indInflation;
 
       Transfer(0x0,indFundDeposit,indFund);
       Transfer(0x0,indFutureDeposit,indFuture);
