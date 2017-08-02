@@ -10,7 +10,7 @@ contract SCRToken is ERC20, SafeMath, Ownable {
    // metadata
     string  public constant name = "Indorse SCR Token";
     string  public constant symbol = "SCR";
-    uint256 public constant decimals = 1;
+    uint256 public constant decimals = 0;
     string  public version = "1.0";
 
     uint256 public totalSupply;
