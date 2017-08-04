@@ -49,7 +49,6 @@ contract SafeMath {
       assert((x == 0)||(z/x == y));
       return z;
     }
-
 }
 // ================= Safemath Contract end ==============================
 
@@ -171,11 +170,10 @@ contract Pausable is Ownable {
 
 // ================= Indorse Token Contract start =======================
 // note introduced onlyPayloadSize in StandardToken.sol to protect against short address attacks
-// Then Deploy IndorseToken and SCRToken
+// Then Deploy IndorseToken 
 // Then deploy Sale Contract
 // Then, using indFundDeposit account call approve(saleContract,<amount of offering>)
 contract IndorseToken is SafeMath, StandardToken, Pausable {
-
     // metadata
     string public constant name = "Indorse Token";
     string public constant symbol = "IND";
@@ -188,10 +186,10 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     address public indPresaleDeposit;   // deposit address for Indorse Future reserve
     address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
-    uint256 public constant indFund    = 301 * (10 ** 5) * 10**decimals;   // 30.1 million IND reserved for Indorse use
-    uint256 public constant indPreSale =  17 * (10 ** 6) * 10**decimals; // 
-    uint256 public constant indFuture  = 692 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indInflation  = 100 * (10**6) * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indFund    = 29 * (10 ** 6) * 10**decimals;   // 30.1 million IND reserved for Indorse use
+    uint256 public constant indPreSale =  676 * (10 ** 5) * 10**decimals; // 
+    uint256 public constant indFuture  = 642 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indInflation  = 151 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
    
     // constructor
     function IndorseToken(
@@ -211,7 +209,7 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
       balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
       balances[indInflationDeposit] = indInflation; // Deposit for inflation
 
-      totalSupply       = indFund + indPreSale + indFuture + indInflation;
+      totalSupply = indFund + indPreSale + indFuture + indInflation;
 
       Transfer(0x0,indFundDeposit,indFund);
       Transfer(0x0,indFutureDeposit,indFuture);

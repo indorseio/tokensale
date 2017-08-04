@@ -9,13 +9,13 @@ var supply_sale = 30100000000000000000000000;
 var num_tokens  = 1000000000000000000000000;
 
 contract('saleContract', function(accounts){
-  it("should not have a total supply of 30.1 million tokens to begin with", function(){
+  it("should not have a total supply of 29 million tokens to begin with", function(){
     return saleContract.deployed().then(function(instance){
       saleContractAddress = instance.address;
       return instance.totalSupply();
     }).then(function(supply){
     	console.log("Supply of Sale Contract =", supply.valueOf());
-      assert.notEqual(supply.valueOf(), 30100000000000000000000000, "Total supply isn't zero");
+      assert.notEqual(supply.valueOf(), 29000000000000000000000000, "Total supply isn't zero");
     });
   });
 
@@ -27,20 +27,7 @@ contract('saleContract', function(accounts){
   	}).then(function(){
   		return instance_IND.allowance.call(accounts[0], saleContractAddress);
   	}).then(function(supply){
-      assert.equal(supply.valueOf(), 30100000000000000000000000, "allowance of Sale Contract isn't set properly");
-    });
-  });
-
-  it("SCR contract should have Sale Contract set as host", function(){
-    SCRToken.deployed().then(function(instance){
-      instance_SCR = instance;
-      // console.log("SCR token address =", instance_SCR.address);
-      return instance_SCR.approve(saleContractAddress, 1000, {from: accounts[0]});
-    }).then(function(){
-      return instance_SCR.crowdSale();
-    }).then(function(address){
-      // console.log("Address of the Indorse Platform in the SCR contract =", address);
-      assert.equal(address, saleContractAddress, "Indorse Platform address isn't set properly");
+      assert.equal(supply.valueOf(), 29000000000000000000000000, "allowance of Sale Contract isn't set properly");
     });
   });
 
@@ -83,37 +70,3 @@ contract('saleContract', function(accounts){
   });
 });
 
-// // it("should send coin correctly", function() {
-// //     var meta;
-
-// //     // Get initial balances of first and second account.
-// //     var account_one = accounts[0];
-// //     var account_two = accounts[1];
-
-// //     var account_one_starting_balance;
-// //     var account_two_starting_balance;
-// //     var account_one_ending_balance;
-// //     var account_two_ending_balance;
-
-// //     var amount = 10;
-
-// //     return MetaCoin.deployed().then(function(instance) {
-// //       meta = instance;
-// //       return meta.getBalance.call(account_one);
-// //     }).then(function(balance) {
-// //       account_one_starting_balance = balance.toNumber();
-// //       return meta.getBalance.call(account_two);
-// //     }).then(function(balance) {
-// //       account_two_starting_balance = balance.toNumber();
-// //       return meta.sendCoin(account_two, amount, {from: account_one});
-// //     }).then(function() {
-// //       return meta.getBalance.call(account_one);
-// //     }).then(function(balance) {
-// //       account_one_ending_balance = balance.toNumber();
-// //       return meta.getBalance.call(account_two);
-// //     }).then(function(balance) {
-// //       account_two_ending_balance = balance.toNumber();
-
-// //       assert.equal(account_one_ending_balance, account_one_starting_balance - amount, "Amount wasn't correctly taken from the sender");
-// //       assert.equal(account_two_ending_balance, account_two_starting_balance + amount, "Amount wasn't correctly sent to the receiver");
-// //     });
