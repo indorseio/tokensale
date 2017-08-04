@@ -24,6 +24,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     address public ethFundDeposit;      // deposit address for ETH for Indorse Fund
     address public indFundDeposit;      // deposit address for Indorse reserve
 
+    bool public isFinalized;                                    // switched to true in operational state
     uint256 public constant decimals = 18;  // #dp in Indorse contract
     uint256 public tokenCreationCap;
     uint256 public constant tokenExchangeRate = 1000;               // 1000 IND tokens per 1 ETH
@@ -43,6 +44,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
         fundingEndTime   = fundingStartTime + duration * 1 days;
 
         tokenCreationCap = ind.balanceOf(_indFundDeposit);
+        isFinalized = false;
     }
 
     event MintIND(address from, address to, uint256 val);
@@ -67,6 +69,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
       require (now >= fundingStartTime);
       require (now <= fundingEndTime);
       require (_value > minContribution);         // To avoid spam transactions on the network    
+      require (!isFinalized);
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
       uint256 checkedSupply = safeAdd(totalSupply, tokens);
@@ -95,5 +98,13 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
           badCreateSCR(_beneficiary,_value / 1 ether);
       }
       ethFundDeposit.transfer(this.balance);
+    }
+    
+    /// @dev Ends the funding period and sends the ETH home
+    function finalize() external onlyOwner {
+      require (!isFinalized);
+      // move to operational
+      isFinalized = true;
+      ethFundDeposit.transfer(this.balance);                     // send the eth to Indorse multi-sig
     }
 }
