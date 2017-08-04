@@ -9,12 +9,7 @@ import "./SafeMath.sol";
 import "./Ownable.sol";
 import "./Pausable.sol";
 
-
 contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
-
-    event badCreateSCR(address _beneficiary,uint256 tokens);
-
-    SCRToken        scr;
     IndorseToken    ind;
 
     // crowdsale parameters
@@ -33,12 +28,10 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     function IndorseSaleContract(   address _ethFundDeposit,
                                     address _indFundDeposit,
                                     address _INDtoken, 
-                                    address _SCRtoken,
                                     uint256 _fundingStartTime,
                                     uint256 duration    ) { // duration in days
         ethFundDeposit   = _ethFundDeposit;
         indFundDeposit   = _indFundDeposit;
-        scr = SCRToken(_SCRtoken);
         ind = IndorseToken(_INDtoken);
         fundingStartTime = _fundingStartTime;
         fundingEndTime   = fundingStartTime + duration * 1 days;
@@ -53,10 +46,6 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     function CreateIND(address to, uint256 val) internal returns (bool success){
         MintIND(indFundDeposit,to,val);
         return ind.transferFrom(indFundDeposit,to,val);
-    }
-
-    function CreateSCR(address to, uint256 val) internal returns (bool success){
-        return scr.transferFrom(0x0,to,val);
     }
 
     function () payable {    
@@ -82,9 +71,6 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
         uint256 etherToRefund = tokensToRefund / tokenExchangeRate;
 
         require(CreateIND(_beneficiary,tokensToAllocate));            // Create IDR
-        if (!CreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether)) {
-            badCreateSCR(_beneficiary,(_value - etherToRefund) / 1 ether);
-        }
         msg.sender.transfer(etherToRefund);
         LogRefund(msg.sender,etherToRefund);
         ethFundDeposit.transfer(this.balance);
@@ -94,9 +80,6 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
 
       totalSupply = checkedSupply;
       require(CreateIND(_beneficiary, tokens));  // logs token creation
-      if (!CreateSCR(_beneficiary, _value / 1 ether)) {
-          badCreateSCR(_beneficiary,_value / 1 ether);
-      }
       ethFundDeposit.transfer(this.balance);
     }
     
