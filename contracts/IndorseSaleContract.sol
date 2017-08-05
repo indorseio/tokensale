@@ -57,7 +57,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
       require (tokenCreationCap > totalSupply);  // CAP reached no more please
       require (now >= fundingStartTime);
       require (now <= fundingEndTime);
-      require (_value > minContribution);         // To avoid spam transactions on the network    
+      require (_value >= minContribution);         // To avoid spam transactions on the network    
       require (!isFinalized);
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals

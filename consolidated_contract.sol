@@ -186,7 +186,7 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     address public indPresaleDeposit;   // deposit address for Indorse Future reserve
     address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
-    uint256 public constant indFund    = 29 * (10 ** 6) * 10**decimals;   // 30.1 million IND reserved for Indorse use
+    uint256 public constant indFund    = 29 * (10 ** 6) * 10**decimals;   // 29 million IND reserved for Indorse use
     uint256 public constant indPreSale =  676 * (10 ** 5) * 10**decimals; // 
     uint256 public constant indFuture  = 642 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
     uint256 public constant indInflation  = 151 * (10**5) * 10**decimals;  // 69.2 million IND for future token sale
@@ -276,7 +276,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
       require (tokenCreationCap > totalSupply);  // CAP reached no more please
       require (now >= fundingStartTime);
       require (now <= fundingEndTime);
-      require (_value > minContribution);         // To avoid spam transactions on the network    
+      require (_value >= minContribution);         // To avoid spam transactions on the network    
       require (!isFinalized);
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
