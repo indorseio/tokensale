@@ -169,12 +169,12 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
     uint256 public constant indSale = 31603785 * 10**decimals;   // 29 million IND reserved for Indorse use
-    uint256 public constant indSeed = 3975202 * 10**decimals; // 
-    uint256 public constant indPreSale = 23166575 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indVesting  = 28167614 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indCommunity  = 10954072 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indFuture  = 58619494 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indInflation  = 14670632 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indSeed = 3842011 * 10**decimals; // 
+    uint256 public constant indPreSale = 22995270 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indVesting  = 28079514 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indCommunity  = 10919811 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indFuture  = 58556909 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indInflation  = 14624747 * 10**decimals;  // 69.2 million IND for future token sale
    
     // constructor
     function IndorseToken(
@@ -248,13 +248,13 @@ contract INDvesting {
     allocations[0xB0D9693eEC83452BD54FA5E0318850cc1B1a4a19] = 150000;
 
     // Team
-    allocations[0x00e21B56A62ff177331C38A359AE0b316fa432Cc] = 6259469;
-    allocations[0xa6565606564282E2E23a86689d43448F6fc3236E] = 6259469;
-    allocations[0xFaa2480cbCe8FAa7fb706f0f16C9AB33873A1E38] = 3129734;
-    allocations[0x60FA8f4324c8082B6155253C3DFe46728Ef6fa20] = 3129734;
+    allocations[0x00e21B56A62ff177331C38A359AE0b316fa432Cc] = 6239891;
+    allocations[0xa6565606564282E2E23a86689d43448F6fc3236E] = 6239891;
+    allocations[0xFaa2480cbCe8FAa7fb706f0f16C9AB33873A1E38] = 3119945;
+    allocations[0x60FA8f4324c8082B6155253C3DFe46728Ef6fa20] = 3119945;
 
     // TBD - testing for Kovan
-    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 3129734;
+    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 3119945;
   }
 
   function unlock() external {

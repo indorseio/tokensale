@@ -25,12 +25,12 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
     uint256 public constant indSale = 31603785 * 10**decimals;   // 29 million IND reserved for Indorse use
-    uint256 public constant indSeed = 3975202 * 10**decimals; // 
-    uint256 public constant indPreSale = 23166575 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indVesting  = 28167614 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indCommunity  = 10954072 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indFuture  = 58619494 * 10**decimals;  // 69.2 million IND for future token sale
-    uint256 public constant indInflation  = 14670632 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indSeed = 3842011 * 10**decimals; // 
+    uint256 public constant indPreSale = 22995270 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indVesting  = 28079514 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indCommunity  = 10919811 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indFuture  = 58556909 * 10**decimals;  // 69.2 million IND for future token sale
+    uint256 public constant indInflation  = 14624747 * 10**decimals;  // 69.2 million IND for future token sale
    
     // constructor
     function IndorseToken(
