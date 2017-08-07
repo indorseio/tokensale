@@ -16,9 +16,12 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     string public version = "1.0";
 
     // contracts
-    address public indFundDeposit;      // deposit address for Indorse reserve
-    address public indFutureDeposit;    // deposit address for Indorse Future reserve
+    address public indSaleDeposit;      // deposit address for Indorse reserve
+    address public indSeedDeposit;    // deposit address for Indorse Future reserve
     address public indPresaleDeposit;   // deposit address for Indorse Future reserve
+    address public indVestingDeposit; // deposit address for Indorse Inflation pool
+    address public indCommunityDeposit; // deposit address for Indorse Inflation pool
+    address public indFutureDeposit; // deposit address for Indorse Inflation pool
     address public indInflationDeposit; // deposit address for Indorse Inflation pool
     
     uint256 public constant indSale = 31603785 * 10**decimals;   // 29 million IND reserved for Indorse use
@@ -31,27 +34,39 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
    
     // constructor
     function IndorseToken(
-        address _indFundDeposit,
-        address _indFutureDeposit,
+        address _indSaleDeposit,
+        address _indSeedDeposit,
         address _indPresaleDeposit,
+        address _indVestingDeposit,
+        address _indCommunityDeposit,
+        address _indFutureDeposit,
         address _indInflationDeposit
         )
     {
-      indFundDeposit    = _indFundDeposit;
-      indFutureDeposit  = _indFutureDeposit ;
+      indSaleDeposit = _indSaleDeposit;
+      indSeedDeposit = _indSeedDeposit;
       indPresaleDeposit = _indPresaleDeposit;
+      indVestingDeposit = _indVestingDeposit;
+      indCommunityDeposit = _indCommunityDeposit;
+      indFutureDeposit = _indFutureDeposit;
       indInflationDeposit = _indInflationDeposit;
       
-      balances[indFundDeposit]    = indFund;    // Deposit IND share
-      balances[indFutureDeposit]  = indFuture;  // Deposit IND share
+      balances[indSaleDeposit]    = indSale;    // Deposit IND share
+      balances[indSeedDeposit]  = indSeed;  // Deposit IND share
       balances[indPresaleDeposit] = indPreSale;    // Deposit IND future share
+      balances[indVestingDeposit] = indVesting;    // Deposit IND future share
+      balances[indCommunityDeposit] = indCommunity;    // Deposit IND future share
+      balances[indFutureDeposit] = indFuture;    // Deposit IND future share
       balances[indInflationDeposit] = indInflation; // Deposit for inflation
 
-      totalSupply = indFund + indPreSale + indFuture + indInflation;
+      totalSupply = indSale + indSeed + indPreSale + indVesting + indCommunity + indFuture + indInflation;
 
-      Transfer(0x0,indFundDeposit,indFund);
-      Transfer(0x0,indFutureDeposit,indFuture);
+      Transfer(0x0,indSaleDeposit,indSale);
+      Transfer(0x0,indSeedDeposit,indSeed);
       Transfer(0x0,indPresaleDeposit,indPreSale);
+      Transfer(0x0,indVestingDeposit,indVesting);
+      Transfer(0x0,indCommunityDeposit,indCommunity);
+      Transfer(0x0,indFutureDeposit,indFuture);
       Transfer(0x0,indInflationDeposit,indInflation);
    }
 
