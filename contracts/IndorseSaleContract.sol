@@ -24,6 +24,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     uint256 public tokenCreationCap;
     uint256 public constant tokenExchangeRate = 1000;               // 1000 IND tokens per 1 ETH
     uint256 public constant minContribution = 0.05 ether;
+    uint256 public constant maxTokens = 1 * (10 ** 6) * 10**decimals;
  
     function IndorseSaleContract(   address _ethFundDeposit,
                                     address _indFundDeposit,
@@ -62,6 +63,8 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
       uint256 checkedSupply = safeAdd(totalSupply, tokens);
+
+      require (ind.balanceOf(msg.sender) + tokens <= maxTokens);
       
       // DA 8/6/2017 to fairly allocate the last few tokens
       if (tokenCreationCap < checkedSupply) {        
