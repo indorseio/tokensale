@@ -25,6 +25,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     uint256 public constant tokenExchangeRate = 1000;               // 1000 IND tokens per 1 ETH
     uint256 public constant minContribution = 0.05 ether;
     uint256 public constant maxTokens = 1 * (10 ** 6) * 10**decimals;
+    uint256 public constant MAX_GAS_PRICE = 50000000000 wei;    // maximum gas price for contribution transactions
  
     function IndorseSaleContract(   address _ethFundDeposit,
                                     address _indFundDeposit,
@@ -60,6 +61,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
       require (now <= fundingEndTime);
       require (_value >= minContribution);         // To avoid spam transactions on the network    
       require (!isFinalized);
+      require (tx.gasprice <= MAX_GAS_PRICE);
 
       uint256 tokens = safeMult(_value, tokenExchangeRate); // check that we're not over totals
       uint256 checkedSupply = safeAdd(totalSupply, tokens);

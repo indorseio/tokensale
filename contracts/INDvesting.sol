@@ -227,21 +227,33 @@ contract INDvesting {
     IND = _IND;
     indPresaleDeposit = _indPresaleDeposit;
     unlockDate = now + 240 days;
-    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 16000000;
-    allocations[0x0035b1bf7a579a0e9E945Eb476365C42d8Df24E9] = 16000000;
-    allocations[0x002a9FA6af0b680358830E0AfF66Ecd16b392137] = 16000000;
-    allocations[0x009B891278716d68c68DDAeEed7b0Ab39504F417] = 16000000;
-    allocations[0x000eFBCe70A85b1a63C62d26F7d620Fc458Dbc7a] = 8000000;
-    allocations[0x00BbCd21da10C0ce9F67A7D4534b25D3602E8Cc0] = 8000000;
-    allocations[0x007161DB7cB2E01cB5739b1c27C02486f619b8A9] = 8000000;
-    allocations[0xF94BE6b93432b39Bc1637FDD656740758736d935] = 4000000;
+
+    // Advisors
+    allocations[0xe8C67375D802c9Ae9583df38492Ff3be49e8Ca89] = 100000;
+    allocations[0x3DFb8A970e8d11B4002b2bc98d5a09b09Da3482c] = 100000;
+    allocations[0xC865a2220960585A0D365E8D0d7897d4E3547ae6] = 10000;
+    allocations[0x0DC77D48f290aCaC0e831c835714Ae45e65Ac3d8] = 150000;
+    allocations[0x9628dB0f162665C34BFC0655D55c6B637552B9ec] = 50000;
+    allocations[0x89B7c9c2D529284F9E942389D0894EEadF34f037] = 150000;
+    allocations[0xee4918fbd8Cd49a46B66488C523c3C24d9426270] = 100000;
+    allocations[0xc8A1DAb586DEe8a30Cb88C87b8A3614E0a391fC5] = 100000;
+    allocations[0x0ed1374A831744aF48174a890BbA5ac333e76717] = 50000;
+    allocations[0x293a0369D58aF2433C3A435A6B5343C5455C4eD4] = 100000;
+    allocations[0xf190f0193b694d9d2bb865a66f0c17cbd8280c71] = 50000;
+    allocations[0xB0D9693eEC83452BD54FA5E0318850cc1B1a4a19] = 150000;
+
+    // Team
+    allocations[0x00e21B56A62ff177331C38A359AE0b316fa432Cc] = 6259469;
+    allocations[0xa6565606564282E2E23a86689d43448F6fc3236E] = 6259469;
+    allocations[0xFaa2480cbCe8FAa7fb706f0f16C9AB33873A1E38] = 3129734;
+    allocations[0x60FA8f4324c8082B6155253C3DFe46728Ef6fa20] = 3129734;
   }
 
   function unlock() external {
-    if(now < unlockDate) throw;
+    require (now < unlockDate);
     uint256 entitled = allocations[msg.sender];
     allocations[msg.sender] = 0;
-    if(!IndorseToken(IND).transferFrom(indPresaleDeposit, msg.sender, entitled * exponent)) throw;
+    require(StandardToken(IND).transfer(msg.sender, entitled * exponent));
   }
 
 }
