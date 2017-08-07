@@ -90,7 +90,7 @@ contract StandardToken is ERC20, SafeMath {
 }
 
 contract INDInflationVesting {
-  mapping (address => uint256) allocations;
+  mapping (address => uint256) public allocations;
   uint256 public unlockDate;
   uint256 public entitled;
   address public IND;

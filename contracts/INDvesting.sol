@@ -90,7 +90,7 @@ contract StandardToken is ERC20, SafeMath {
 }
 
 contract INDvesting {
-  mapping (address => uint256) allocations;
+  mapping (address => uint256) public allocations;
   uint256 public unlockDate;
   address public IND;
   uint256 public constant exponent = 10**18;
