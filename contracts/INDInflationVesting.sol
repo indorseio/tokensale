@@ -105,7 +105,7 @@ contract INDInflationVesting {
   }
 
   function unlock() external {
-    require (now < unlockDate);
+    require (now > unlockDate);
     uint256 entitled = allocations[msg.sender];
     allocations[msg.sender] = 0;
     require(StandardToken(IND).transfer(msg.sender, entitled * exponent));

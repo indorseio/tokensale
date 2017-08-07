@@ -103,19 +103,19 @@ contract INDFutureVesting {
     unlockDate2 = now + 720 days;
 
     // Advisors
-    allocations[0xe8C67375D802c9Ae9583df38492Ff3be49e8Ca89] = 29309747;
-    allocations[0x3DFb8A970e8d11B4002b2bc98d5a09b09Da3482c] = 29309747;
+    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 29309747;
+    allocations[0x0035b1bf7a579a0e9E945Eb476365C42d8Df24E9] = 29309747;
   }
 
   function unlock() external {
-    if (msg.sender == 0xe8C67375D802c9Ae9583df38492Ff3be49e8Ca89){
-      require (now < unlockDate1);
+    if (msg.sender == 0x00b92C9d330b1578c226F92cA4A07c267a58b77E){
+      require (now > unlockDate1);
       entitled = allocations[msg.sender];
       allocations[msg.sender] = 0;
       require(StandardToken(IND).transfer(msg.sender, entitled * exponent));
     } 
-    if (msg.sender == 0x3DFb8A970e8d11B4002b2bc98d5a09b09Da3482c){
-      require (now < unlockDate2);
+    if (msg.sender == 0x0035b1bf7a579a0e9E945Eb476365C42d8Df24E9){
+      require (now > unlockDate2);
       entitled = allocations[msg.sender];
       allocations[msg.sender] = 0;
       require(StandardToken(IND).transfer(msg.sender, entitled * exponent));
