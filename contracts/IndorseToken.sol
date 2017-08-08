@@ -30,13 +30,13 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
     // constructor
     function IndorseToken()
     {
-      balances[indSaleDeposit]    = indSale;                                                 // Deposit IND share
-      balances[indSeedDeposit]  = indSeed;                                                   // Deposit IND share
-      balances[indPresaleDeposit] = indPreSale;                                              // Deposit IND future share
-      balances[indVestingDeposit] = indVesting;                                              // Deposit IND future share
-      balances[indCommunityDeposit] = indCommunity;                                          // Deposit IND future share
-      balances[indFutureDeposit] = indFuture;                                                // Deposit IND future share
-      balances[indInflationDeposit] = indInflation;                                          // Deposit for inflation
+      balances[indSaleDeposit]           = indSale;                                         // Deposit IND share
+      balances[indSeedDeposit]           = indSeed;                                         // Deposit IND share
+      balances[indPresaleDeposit]        = indPreSale;                                      // Deposit IND future share
+      balances[indVestingDeposit]        = indVesting;                                      // Deposit IND future share
+      balances[indCommunityDeposit]      = indCommunity;                                    // Deposit IND future share
+      balances[indFutureDeposit]         = indFuture;                                       // Deposit IND future share
+      balances[indInflationDeposit]      = indInflation;                                    // Deposit for inflation
 
       totalSupply = indSale + indSeed + indPreSale + indVesting + indCommunity + indFuture + indInflation;
 

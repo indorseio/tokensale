@@ -210,7 +210,7 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
 contract INDvesting {
   mapping (address => uint256) public allocations;
   uint256 public unlockDate;
-  address public IND;
+  address public IND = 0xf8e386EDa857484f5a12e4B5DAa9984E06E73705;
   uint256 public constant exponent = 10**18;
 
   function INDvesting() {

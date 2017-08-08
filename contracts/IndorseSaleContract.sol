@@ -18,7 +18,7 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     uint256 public totalSupply;
     address public ethFundDeposit   = 0x26967201d4D1e1aA97554838dEfA4fC4d010FF6F;      // deposit address for ETH for Indorse Fund
     address public indFundDeposit   = 0x0053B91E38B207C97CBff06f48a0f7Ab2Dd81449;      // deposit address for Indorse reserve
-    address public indAddress;
+    address public indAddress       = 0xf8e386EDa857484f5a12e4B5DAa9984E06E73705;
 
     bool public isFinalized;                                                            // switched to true in operational state
     uint256 public constant decimals = 18;                                              // #dp in Indorse contract
