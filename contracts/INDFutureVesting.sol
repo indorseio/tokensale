@@ -225,35 +225,23 @@ contract IndorseToken is SafeMath, StandardToken, Pausable {
 
 contract INDFutureVesting {
   mapping (address => uint256) public allocations;
-  uint256 public unlockDate1;
-  uint256 public unlockDate2;
+  uint256 public unlockDate;
   uint256 public entitled;
   address public IND;
   uint256 public constant exponent = 10**18;
 
   function INDFutureVesting(address _IND) {
     IND = _IND;
-    unlockDate1 = now + 540 days;
-    unlockDate2 = now + 720 days;
-
+    unlockDate = now + 540 days;
+    
     // Advisors
-    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 29309747;
-    allocations[0x0035b1bf7a579a0e9E945Eb476365C42d8Df24E9] = 29309747;
+    allocations[0x00BbCd21da10C0ce9F67A7D4534b25D3602E8Cc0] = 58556909;
   }
 
   function unlock() external {
-    if (msg.sender == 0x00b92C9d330b1578c226F92cA4A07c267a58b77E){
-      require (now > unlockDate1);
-      entitled = allocations[msg.sender];
-      allocations[msg.sender] = 0;
-      require(IndorseToken(IND).transfer(msg.sender, entitled * exponent));
-    } 
-    if (msg.sender == 0x0035b1bf7a579a0e9E945Eb476365C42d8Df24E9){
-      require (now > unlockDate2);
-      entitled = allocations[msg.sender];
-      allocations[msg.sender] = 0;
-      require(IndorseToken(IND).transfer(msg.sender, entitled * exponent));
-    }
-    throw;
+    require (now > unlockDate);
+    entitled = allocations[msg.sender];
+    allocations[msg.sender] = 0;
+    require(IndorseToken(IND).transfer(msg.sender, entitled * exponent));
   }
 }

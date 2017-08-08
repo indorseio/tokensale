@@ -235,7 +235,7 @@ contract INDInflationVesting {
     unlockDate = now + 270 days;
     
     // Advisors
-    allocations[0xe8C67375D802c9Ae9583df38492Ff3be49e8Ca89] = 14670632;
+    allocations[0xe8C67375D802c9Ae9583df38492Ff3be49e8Ca89] = 14624747;
   }
 
   function unlock() external {
