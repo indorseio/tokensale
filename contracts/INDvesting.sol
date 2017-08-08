@@ -253,12 +253,9 @@ contract INDvesting {
     allocations[0xa6565606564282E2E23a86689d43448F6fc3236E] = 6239891;
     allocations[0xFaa2480cbCe8FAa7fb706f0f16C9AB33873A1E38] = 3119945;
     allocations[0xEaE13552b4C19B1Dcb645D40dC578fFabFD2e32C] = 3119945;
-    allocations[0xba74315f5f65dE811C46840901fEDF3D6dcDc748] = 100000;
-
-    // TBD - testing for Kovan
-    allocations[0x00b92C9d330b1578c226F92cA4A07c267a58b77E] = 3119945;
+    allocations[0xba74315f5f65dE811C46840901fEDF3D6dcDc748] = 50000;
   }
-
+50000000000
   function unlock() external {
     require (now > unlockDate);
     uint256 entitled = allocations[msg.sender];

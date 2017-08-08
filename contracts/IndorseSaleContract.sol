@@ -13,11 +13,12 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     IndorseToken    ind;
 
     // crowdsale parameters
-    uint256 public fundingStartTime;
-    uint256 public fundingEndTime;
+    uint256 public fundingStartTime = 1502193600;
+    uint256 public fundingEndTime = 1504785600;
     uint256 public totalSupply;
-    address public ethFundDeposit;      // deposit address for ETH for Indorse Fund
-    address public indFundDeposit;      // deposit address for Indorse reserve
+    address public ethFundDeposit = 0x26967201d4D1e1aA97554838dEfA4fC4d010FF6F;      // deposit address for ETH for Indorse Fund
+    address public indFundDeposit = 0x0053B91E38B207C97CBff06f48a0f7Ab2Dd81449;      // deposit address for Indorse reserve
+    address public indAddress;
 
     bool public isFinalized;                                    // switched to true in operational state
     uint256 public constant decimals = 18;  // #dp in Indorse contract
@@ -27,18 +28,9 @@ contract IndorseSaleContract is  Ownable,SafeMath,Pausable {
     uint256 public constant maxTokens = 1 * (10 ** 6) * 10**decimals;
     uint256 public constant MAX_GAS_PRICE = 50000000000 wei;    // maximum gas price for contribution transactions
  
-    function IndorseSaleContract(   address _ethFundDeposit,
-                                    address _indFundDeposit,
-                                    address _INDtoken, 
-                                    uint256 _fundingStartTime,
-                                    uint256 duration    ) { // duration in days
-        ethFundDeposit   = _ethFundDeposit;
-        indFundDeposit   = _indFundDeposit;
-        ind = IndorseToken(_INDtoken);
-        fundingStartTime = _fundingStartTime;
-        fundingEndTime   = fundingStartTime + duration * 1 days;
-
-        tokenCreationCap = ind.balanceOf(_indFundDeposit);
+    function IndorseSaleContract() {
+        ind = IndorseToken(indAddress);
+        tokenCreationCap = ind.balanceOf(indFundDeposit);
         isFinalized = false;
     }
 
